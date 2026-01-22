@@ -1,10 +1,26 @@
+using HK.ServerReact.Server.Hubs;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:54024",  // React dev server
+                "https://localhost:54024"  // React dev server
+                                           // ,"https://your-production-frontend.com"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); // Required for SignalR
+    });
+});
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -19,10 +35,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseWebSockets();
+app.UseRouting();
+
 app.UseAuthorization();
 
+app.MapHub<NotificationsHub>("/hubs/notifications");
 app.MapControllers();
-
 app.MapFallbackToFile("/index.html");
 
 app.Run();
