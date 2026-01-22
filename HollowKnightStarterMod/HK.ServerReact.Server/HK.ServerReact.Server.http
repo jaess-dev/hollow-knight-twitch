@@ -1,0 +1,6 @@
+@HK.ServerReact.Server_HostAddress = http://localhost:5063
+
+GET {{HK.ServerReact.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
