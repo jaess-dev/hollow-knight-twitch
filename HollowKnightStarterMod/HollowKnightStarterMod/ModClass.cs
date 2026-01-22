@@ -2,9 +2,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using HK.Domain;
 using Modding;
 using UnityEngine;
 
@@ -12,16 +16,18 @@ namespace HollowKnightStarterMod;
 
 public class HollowKnightStarterMod : Mod
 {
-    private readonly BotConnector _botConnector;
+    private ICommunication _connector;
     public HollowKnightStarterMod() : base("HkEventDistributer")
     {
-        _botConnector = new BotConnector(new(), LogError);
     }
 
     public override string GetVersion() => "v0.0.2";
 
     public override void Initialize()
     {
+        AppDomain.CurrentDomain.AssemblyResolve += ResolveEmbeddedAssembly;
+
+        _connector = new ServerConnector(new(), LogError);
         // On.HeroController.AddGeo += OnAddGeo;
         On.HeroController.Die += (On.HeroController.orig_Die org, HeroController self) =>
         {
@@ -46,7 +52,7 @@ public class HollowKnightStarterMod : Mod
 
     private void OnDeath(On.HeroController.orig_Die org, HeroController self)
     {
-        _ = _botConnector.SendYouDiedAsync();
+        _ = _connector.SendYouDiedAsync();
     }
 
     private void OnAddGeo(On.HeroController.orig_AddGeo orig, HeroController self, int amount)
@@ -55,7 +61,24 @@ public class HollowKnightStarterMod : Mod
         if (amount <= 0)
             return;
 
-        _ = _botConnector.SendGeoEventAsync(amount, self.playerData.geo);
+        _ = _connector.SendGeoEventAsync(amount, self.playerData.geo);
     }
 
+    private Assembly? ResolveEmbeddedAssembly(object? sender, ResolveEventArgs args)
+    {
+        string resourceName = Assembly.GetExecutingAssembly()
+            .GetManifestResourceNames()
+            .FirstOrDefault(r => r.EndsWith("MySharedLib.dll"));
+
+        if (resourceName == null)
+            return null;
+
+        using Stream stream =
+            Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName)!;
+
+        byte[] buffer = new byte[stream.Length];
+        stream.Read(buffer, 0, buffer.Length);
+
+        return Assembly.Load(buffer);
+    }
 }

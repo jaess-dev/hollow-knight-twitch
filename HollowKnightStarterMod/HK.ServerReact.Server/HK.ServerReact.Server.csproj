@@ -24,6 +24,7 @@
     <ProjectReference Include="..\hk.serverreact.client\hk.serverreact.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\HK.Domain\HK.Domain.csproj" />
   </ItemGroup>
 
 </Project>

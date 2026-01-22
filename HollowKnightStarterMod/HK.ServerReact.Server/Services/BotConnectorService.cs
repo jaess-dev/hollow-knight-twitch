@@ -1,16 +1,15 @@
-using System;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+using HK.Domain;
 
 namespace HollowKnightStarterMod;
 
 public class BotConnector(
-    HttpClient httpClient,
-    Action<string> logError)
+    IHttpClientFactory httpClientFactory,
+    ILogger<BotConnector> logger) : ICommunication
 {
-    private readonly HttpClient _httpClient = httpClient;
-    private readonly Action<string> LogError = logError;
+    private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
+    private readonly ILogger<BotConnector> _logger = logger;
 
     public async Task SendYouDiedAsync()
     {
@@ -24,7 +23,7 @@ public class BotConnector(
         }
         catch (Exception ex)
         {
-            LogError($"Failed to send webhook: {ex}");
+            _logger.LogError("Failed to send webhook: {EXCEPTION}", ex);
         }
     }
 
@@ -45,14 +44,13 @@ public class BotConnector(
         }
         catch (Exception ex)
         {
-            LogError($"Failed to send webhook: {ex}");
+            _logger.LogError("Failed to send webhook: {EXCEPTION}", ex);
         }
     }
 
 
     private async Task SendMessageAsync(string id, string name, object args)
     {
-
         var payload = new
         {
             action = new
@@ -63,10 +61,10 @@ public class BotConnector(
             args
         };
 
-        string json = Newtonsoft.Json.JsonConvert.SerializeObject(payload);
-        // string json = System.Text.Json.JsonSerializer.Serialize(payload);
+        string json = JsonSerializer.Serialize(payload);
         using StringContent content = new(json, Encoding.UTF8, "application/json");
-        HttpResponseMessage response = await _httpClient.PostAsync(
+        var client = _httpClientFactory.CreateClient("Streamer.bot.HttpClient");
+        HttpResponseMessage response = await client.PostAsync(
             "http://127.0.0.1:7474/DoAction",
             content
         );

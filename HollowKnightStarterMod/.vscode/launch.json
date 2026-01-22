@@ -1,0 +1,11 @@
+{
+    "version": "0.2.0" , 
+    "configurations": [
+        {
+            "name": "C#: Server Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/HK.ServerReact.Server/Hk.ServerReact.Server.csproj"
+        }
+    ]
+}

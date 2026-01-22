@@ -1,4 +1,8 @@
+using System.Text.Json;
+using HK.Domain;
 using HK.ServerReact.Server.Hubs;
+using HollowKnightStarterMod;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +25,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddSignalR();
+builder.Services.AddHttpClient();
+
+builder.Services.AddSingleton<BotConnector>();
 
 var app = builder.Build();
 
@@ -43,5 +50,34 @@ app.UseAuthorization();
 app.MapHub<NotificationsHub>("/hubs/notifications");
 app.MapControllers();
 app.MapFallbackToFile("/index.html");
+
+app.MapPost("/api/hk/event",
+    async (
+        BotConnector botConnector,
+        ILogger<Program> logger,
+        JsonDocument payload
+    ) =>
+    {
+        JsonElement root = payload.RootElement;
+
+        var eventJson = root.GetProperty("event");
+        string className = eventJson
+            .GetProperty("ClassName")
+            .GetString()
+            ?? throw new BadHttpRequestException("ClassName missing");
+
+        IEvent? @event = className switch
+        {
+            nameof(DeathEvent) => eventJson.Deserialize<DeathEvent>(),
+            _ => null
+        };
+
+        switch (@event)
+        {
+            case DeathEvent deathEvent:
+                await botConnector.SendYouDiedAsync();
+                break;
+        }
+    });
 
 app.Run();
