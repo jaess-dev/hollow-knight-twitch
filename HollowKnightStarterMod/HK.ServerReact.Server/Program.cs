@@ -1,8 +1,16 @@
 using System.Text.Json;
 using HK.Domain;
+using HK.ServerReact.Server.Features;
+using HK.ServerReact.Server.Features.HollowKnightFeatures;
+using HK.ServerReact.Server.Features.HollowKnightFeatures.DeathMessageFeature;
 using HK.ServerReact.Server.Hubs;
-using HollowKnightStarterMod;
+using HK.ServerReact.Server.Services;
 using Microsoft.AspNetCore.Mvc;
+
+FeatureProvider features = [
+    new HkEventDistributerFeature(),
+    new DeathMessageFeature(),
+];
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +35,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddSignalR();
 builder.Services.AddHttpClient();
 
-builder.Services.AddSingleton<BotConnector>();
+builder.Services.AddSingleton<BotConnectorServices>();
+features.AddServices(builder.Services);
 
 var app = builder.Build();
 
@@ -50,38 +59,10 @@ app.UseAuthorization();
 app.MapHub<NotificationsHub>("/hubs/notifications");
 app.MapControllers();
 app.MapFallbackToFile("/index.html");
-
-app.MapPost("/api/hk/event",
-    async (
-        BotConnector botConnector,
-        ILogger<Program> logger,
-        JsonDocument payload
-    ) =>
-    {
-        JsonElement root = payload.RootElement;
-
-        var eventJson = root.GetProperty("event");
-        string className = eventJson
-            .GetProperty("ClassName")
-            .GetString()
-            ?? throw new BadHttpRequestException("ClassName missing");
-
-        IEvent? @event = className switch
-        {
-            nameof(DeathEvent) => eventJson.Deserialize<DeathEvent>(),
-            _ => null
-        };
-
-        switch (@event)
-        {
-            case DeathEvent deathEvent:
-                await botConnector.SendYouDiedAsync();
-                break;
-        }
-    });
+features.MapEndpoints(app);
 
 app.MapPost("/api/twitch/message", async (
-    BotConnector botConnector,
+    BotConnectorServices botConnector,
     ILogger<Program> logger,
     [FromBody] MessageDot payload) =>
 {

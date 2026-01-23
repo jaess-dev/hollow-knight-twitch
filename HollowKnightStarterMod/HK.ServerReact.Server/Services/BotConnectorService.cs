@@ -2,14 +2,14 @@ using System.Text;
 using System.Text.Json;
 using HK.Domain;
 
-namespace HollowKnightStarterMod;
+namespace HK.ServerReact.Server.Services;
 
-public class BotConnector(
+public class BotConnectorServices(
     IHttpClientFactory httpClientFactory,
-    ILogger<BotConnector> logger) : ICommunication
+    ILogger<BotConnectorServices> logger) : ICommunication
 {
     private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
-    private readonly ILogger<BotConnector> _logger = logger;
+    private readonly ILogger<BotConnectorServices> _logger = logger;
 
     public async Task SendYouDiedAsync()
     {
