@@ -65,8 +65,9 @@
     <WriteLinesToFile File="$(ExportDir)/$(TargetName)/SHA.txt"
       Lines="$(OutputFileString);@(FilesWithHashes->'%(FileHash)');$(OutputZipString);@(ZipFilesWithHashes->'%(FileHash)')"
       Overwrite="true" Encoding="UTF-8" />
+
   </Target>
-  <ItemGroup>
+  <ItemGroup Condition="'$(BuildMode)' != 'Embedded'">
     <Reference Include="Assembly-CSharp">
       <HintPath>$(HollowKnightRefs)/Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -342,5 +343,19 @@
     <None Include=".gitignore" />
     <None Include="ReadMe.md" />
     <None Include="Resources\.gitignore" />
+  </ItemGroup>
+
+  <!-- 
+  Make the library consumable by other projects as an "embedded" build. 
+  Int that case only the domain object should be build and nothing else.
+  -->
+  <PropertyGroup Condition="'$(BuildMode)' != 'Embedded'">
+    <BuildMode>Full</BuildMode> <!-- Default -->
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(BuildMode)' == 'Embedded'">
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(BuildMode)' == 'Embedded'">
+    <Compile Include="Domain\**\*.cs" />
   </ItemGroup>
 </Project>

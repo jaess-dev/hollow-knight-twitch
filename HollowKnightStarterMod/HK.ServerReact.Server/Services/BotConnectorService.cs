@@ -48,6 +48,16 @@ public class BotConnector(
         }
     }
 
+    public Task SendChatMessageAsync(string message)
+    {
+        string id = "46753d56-a895-46a8-9a50-749ffd8e120e";
+        string name = "WebEndpoint";
+
+        return SendMessageAsync(id, name, new
+        {
+            msg = message
+        });
+    }
 
     private async Task SendMessageAsync(string id, string name, object args)
     {

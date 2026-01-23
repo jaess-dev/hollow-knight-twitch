@@ -23,9 +23,13 @@ public class HollowKnightStarterMod : Mod
 
     public override string GetVersion() => "v0.0.2";
 
-    public override void Initialize()
+    static HollowKnightStarterMod()
     {
         AppDomain.CurrentDomain.AssemblyResolve += ResolveEmbeddedAssembly;
+    }
+
+    public override void Initialize()
+    {
 
         _connector = new ServerConnector(new(), LogError);
         // On.HeroController.AddGeo += OnAddGeo;
@@ -64,11 +68,11 @@ public class HollowKnightStarterMod : Mod
         _ = _connector.SendGeoEventAsync(amount, self.playerData.geo);
     }
 
-    private Assembly? ResolveEmbeddedAssembly(object? sender, ResolveEventArgs args)
+    private static Assembly? ResolveEmbeddedAssembly(object? sender, ResolveEventArgs args)
     {
         string resourceName = Assembly.GetExecutingAssembly()
             .GetManifestResourceNames()
-            .FirstOrDefault(r => r.EndsWith("MySharedLib.dll"));
+            .FirstOrDefault(r => r.EndsWith("HK.Domain.dll"));
 
         if (resourceName == null)
             return null;

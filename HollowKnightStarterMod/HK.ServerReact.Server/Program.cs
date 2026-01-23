@@ -80,4 +80,16 @@ app.MapPost("/api/hk/event",
         }
     });
 
+app.MapPost("/api/twitch/message", async (
+    BotConnector botConnector,
+    ILogger<Program> logger,
+    [FromBody] MessageDot payload) =>
+{
+    var message = payload.Message;
+    logger.LogInformation("Received message: {MESSAGE}", message);
+    await botConnector.SendChatMessageAsync(message);
+});
+
 app.Run();
+
+public record MessageDot(string Message);
