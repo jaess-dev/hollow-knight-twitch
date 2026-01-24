@@ -19,10 +19,10 @@ namespace HollowKnightStarterMod
 
         public async Task SendYouDiedAsync()
         {
-            await SendMessageAsync(new DeathEvent());
+            await TransmitEventAsync(new DeathEvent());
         }
 
-        private async Task SendMessageAsync(IEvent @event)
+        private async Task TransmitEventAsync(IEvent @event)
         {
             var payload = new
             {
