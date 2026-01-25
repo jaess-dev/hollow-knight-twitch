@@ -1,6 +1,7 @@
 using System.Text.Json;
 using HK.Domain;
 using HK.ServerReact.Server.Features;
+using HK.ServerReact.Server.Features.CounterStrikeFeatures;
 using HK.ServerReact.Server.Features.HollowKnightFeatures;
 using HK.ServerReact.Server.Features.HollowKnightFeatures.DeathMessageFeature;
 using HK.ServerReact.Server.Features.HollowKnightFeatures.RespawnMessageFeature;
@@ -8,11 +9,20 @@ using HK.ServerReact.Server.Features.Hubs;
 using HK.ServerReact.Server.Services;
 using Microsoft.AspNetCore.Mvc;
 
-FeatureProvider features = [
+IFeature[] hkFeatures = [
     new HkEventDistributerFeature(),
     new DeathMessageFeature(),
     new RespawnMessageFeature(),
     new HazardResponseFeature(),
+];
+IFeature[] csFeatures = [
+    new CsEventDistributer(),
+    new KobeFeature(),
+    new ThatsHotFeature(),
+];
+FeatureProvider features = [
+    ..hkFeatures,
+    ..csFeatures,
 ];
 
 var builder = WebApplication.CreateBuilder(args);

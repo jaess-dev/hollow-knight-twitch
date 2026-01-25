@@ -1,0 +1,135 @@
+ @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap');
+
+@keyframes statFlash {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.cs-overlay-container {
+    position: absolute;
+    left: 00%;
+    bottom: -62%;
+
+    min-height: 100vh;
+    background: transparent;
+    display: flex;
+    justify-content: flex-start;
+    padding: 24px;
+}
+
+.kda-panel {
+    font-family: 'Rajdhani', sans-serif;
+    animation: slideIn 0.4s ease-out;
+}
+
+.kda-main-panel {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.8);
+    min-width: 220px;
+}
+
+.kda-stats-container {
+    padding: 16px 20px;
+}
+
+.stat-line {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+}
+
+.stat-line::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 0;
+    background: currentColor;
+    transition: height 0.3s ease;
+}
+
+.stat-line:hover::before {
+    height: 100%;
+}
+
+.stat-flash {
+    animation: statFlash 0.3s ease-out;
+}
+
+.stat-label {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.stat-label-kill {
+    color: #4ade80;
+}
+
+.stat-label-death {
+    color: #f87171;
+}
+
+.stat-label-assist {
+    color: #facc15;
+}
+
+.stat-label-ratio {
+    color: #d1d5db;
+}
+
+.stat-value {
+    font-size: 48px;
+    font-weight: 700;
+    color: white;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.05em;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.stat-value-ratio {
+    font-size: 32px;
+}
+
+.stat-separator {
+    padding: 4px 0;
+    margin: 4px 0;
+}
+
+.stat-separator::after {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.kda-bottom-accent {
+    height: 2px;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
+}

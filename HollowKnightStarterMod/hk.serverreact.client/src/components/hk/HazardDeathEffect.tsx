@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDeathEvent, useGrubSavedEvent, useHazardDeathEvent } from "../../lib/signalr/useSignalr";
+import { useDeathEvent, useGrubSavedEvent, useHazardDeathEvent } from "../../lib/signalr/useHkHub";
 import type { EventType } from "./HkEffect";
 import HollowKnightEventOverlay from "./HkEffect";
 

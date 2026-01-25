@@ -28,5 +28,7 @@
     <ProjectReference Include="..\HollowKnightStarterMod\HollowKnightStarterMod.csproj">
       <Properties>BuildMode=Embedded</Properties>
     </ProjectReference>
+
+    <PackageReference Include="CounterStrike2GSI" Version="1.0.3.8403" />
   </ItemGroup>
 </Project>
