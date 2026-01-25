@@ -22,18 +22,17 @@ public class HkHubService(IHubContext<HkHub> _hubContext)
         await _hubContext.Clients.All.SendAsync(@event.ClassName, Serialize(@event));
     }
 
-    private static string Serialize<T>(T @event) where T : IEvent
+    private static object Serialize<T>(T @event) where T : IEvent
     {
-        string @eventJson = @event is HazardDeathEvent death
-            ? JsonSerializer.Serialize(new
+        return @event is HazardDeathEvent death
+            ? new
             {
                 ClassName = death.ClassName,
                 HazardDeathDto = new
                 {
-                    HazardtypeDto = death.HazardDeathDto.HazardTypeDto.ToString()
+                    HazardTypeDto = death.HazardDeathDto.HazardTypeDto.ToString()
                 }
-            })
-            : JsonSerializer.Serialize(@event);
-        return @eventJson;
+            }
+            : @event;
     }
 }

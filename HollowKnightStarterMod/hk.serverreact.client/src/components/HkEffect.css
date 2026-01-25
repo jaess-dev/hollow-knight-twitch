@@ -1,0 +1,417 @@
+@keyframes soulRise {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-200px) scale(0.3);
+    }
+}
+
+@keyframes particleFloat {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0);
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(calc(var(--tx) - 50%), calc(var(--ty) - 50%)) scale(0.5);
+    }
+}
+
+@keyframes deathFlash {
+    0% {
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    30% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeInOut {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    20%,
+    80% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes grubBounce {
+
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(1);
+    }
+
+    15% {
+        opacity: 1;
+        transform: translateY(-30px) scale(1.2);
+    }
+
+    30% {
+        transform: translateY(0) scale(1);
+    }
+
+    45% {
+        transform: translateY(-20px) scale(1.1);
+    }
+
+    60% {
+        transform: translateY(0) scale(1);
+    }
+
+    75% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+@keyframes grubGlow {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.5);
+    }
+}
+
+@keyframes grubParticleRise {
+    0% {
+        opacity: 0;
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(var(--tx), -150px) rotate(360deg);
+    }
+}
+
+@keyframes hazardFlash {
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0.9;
+    }
+
+    40% {
+        pacity: 0.7;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    10% {
+        transform: translate(-15px, 3px) rotate(-2deg);
+    }
+
+    20% {
+        transform: translate(15px, -4px) rotate(2deg);
+    }
+
+    30% {
+        transform: translate(-12px, 5px) rotate(-1.5deg);
+    }
+
+    40% {
+        transform: translate(12px, -5px) rotate(1.5deg);
+    }
+
+    50% {
+        transform: translate(-8px, 3px) rotate(-1deg);
+    }
+
+    60% {
+        transform: translate(8px, -3px) rotate(1deg);
+    }
+
+    70% {
+        transform: translate(-4px, 2px) rotate(-0.5deg);
+    }
+
+    80% {
+        transform: translate(4px, -2px) rotate(0.5deg);
+    }
+
+    90% {
+        transform: translate(-2px, 1px) rotate(-0.25deg);
+    }
+}
+
+@keyframes impactPulse {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+@keyframes chromatic {
+
+    0%,
+    100% {
+        filter: none;
+    }
+
+    20% {
+        filter:
+            drop-shadow(3px 0 0 rgba(255, 0, 0, 0.8)) drop-shadow(-3px 0 0 rgba(0, 255, 255, 0.8));
+    }
+
+    40% {
+        filter:
+            drop-shadow(2px 0 0 rgba(255, 0, 0, 0.6)) drop-shadow(-2px 0 0 rgba(0, 255, 255, 0.6));
+    }
+}
+
+.soul-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shade-soul {
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(230, 230, 255, 0.9) 0%, rgba(150, 150, 200, 0.6) 50%, transparent 70%);
+    border-radius: 50%;
+    animation: soulRise 2.5s ease-out forwards;
+    box-shadow: 0 0 60px rgba(200, 200, 255, 0.8);
+    position: relative;
+}
+
+.particle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(200, 200, 255, 0.4));
+    border-radius: 50%;
+    animation: particleFloat 2s ease-out forwards;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.particle-1 {
+    --tx: -60px;
+    --ty: -140px;
+    animation-delay: 0.1s;
+}
+
+.particle-2 {
+    --tx: 80px;
+    --ty: -160px;
+    animation-delay: 0.2s;
+}
+
+.particle-3 {
+    --tx: -40px;
+    --ty: -180px;
+    animation-delay: 0.3s;
+}
+
+.particle-4 {
+    --tx: 50px;
+    --ty: -140px;
+    animation-delay: 0.15s;
+}
+
+.death-flash {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
+    animation: deathFlash 1.5s ease-out forwards;
+}
+
+.death-text {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 3rem;
+    font-weight: 300;
+    color: rgba(230, 230, 255, 0.95);
+    text-shadow: 0 0 20px rgba(200, 200, 255, 0.8), 0 0 40px rgba(150, 150, 200, 0.4);
+    letter-spacing: 0.3em;
+    animation: fadeInOut 3s ease-out forwards;
+    font-family: serif;
+}
+
+.grub-container {
+    position: fixed;
+    top: 26%;
+    left: 50%;
+    transform: translateX(-100%);
+
+    /* position: relative; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grub-icon {
+    font-size: 6rem;
+    filter: drop-shadow(0 0 20px rgba(100, 255, 150, 0.8));
+    animation: grubBounce 3s ease-out forwards;
+    z-index: 10;
+}
+
+.grub-glow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(100, 255, 150, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: grubGlow 2s ease-in-out forwards;
+}
+
+.grub-particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, rgba(150, 255, 180, 0.9), rgba(100, 255, 150, 0.3));
+    border-radius: 50%;
+    animation: grubParticleRise 2.5s ease-out forwards;
+}
+
+.grub-particle-1 {
+    --tx: -30px;
+    animation-delay: 0.1s;
+}
+
+.grub-particle-2 {
+    --tx: 40px;
+    animation-delay: 0.3s;
+}
+
+.grub-particle-3 {
+    --tx: -50px;
+    animation-delay: 0.5s;
+}
+
+.grub-particle-4 {
+    --tx: 20px;
+    animation-delay: 0.2s;
+}
+
+.grub-particle-5 {
+    --tx: -20px;
+    animation-delay: 0.4s;
+}
+
+.grub-text {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: rgba(150, 255, 180, 0.95);
+    text-shadow: 0 0 20px rgba(100, 255, 150, 0.8);
+    letter-spacing: 0.2em;
+    animation: fadeInOut 3s ease-out forwards;
+    font-family: serif;
+}
+
+.hazard-flash {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle, rgba(255, 30, 30, 0.7) 0%, rgba(255, 50, 50, 0.4) 40%, transparent 70%);
+    animation: hazardFlash 0.8s ease-out forwards;
+}
+
+.hazard-shake {
+    position: fixed;
+    inset: 0;
+    animation: shake 0.8s ease-out forwards, chromatic 0.6s ease-out forwards;
+}
+
+.hazard-vignette {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle, transparent 30%, rgba(180, 0, 0, 0.5) 100%);
+    animation: hazardFlash 0.8s ease-out forwards;
+}
+
+.hazard-impact {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    border: 4px solid rgba(255, 50, 50, 0.9);
+    border-radius: 50%;
+    animation: impactPulse 0.6s ease-out forwards;
+}
+
+.hazard-impact-2 {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    border: 3px solid rgba(255, 100, 100, 0.7);
+    border-radius: 50%;
+    animation: impactPulse 0.6s ease-out forwards;
+    animation-delay: 0.1s;
+}

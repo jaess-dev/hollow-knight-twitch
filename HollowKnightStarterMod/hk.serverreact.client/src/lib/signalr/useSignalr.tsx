@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 
 let connection: HubConnection | null = null;
 
-const getSignalRConnection = (): HubConnection => {
+const getHkHubConnection = (): HubConnection => {
     if (!connection) {
         connection = new HubConnectionBuilder()
-            .withUrl("/hubs/notifications")
+            .withUrl("/hubs/hk")
             .withAutomaticReconnect()
             .configureLogging(LogLevel.Information)
             .build();
@@ -16,9 +16,9 @@ const getSignalRConnection = (): HubConnection => {
 };
 
 
-export const useSignalR = () => {
+export const useHkHub = () => {
     const [isConnected, setIsConnected] = useState(false);
-    const connection = getSignalRConnection();
+    const connection = getHkHubConnection();
 
     useEffect(() => {
         if (connection.state === "Disconnected") {
@@ -42,4 +42,67 @@ export const useSignalR = () => {
     }, [connection]);
 
     return { connection, isConnected };
+};
+
+export type HazardDeathEvent = {
+    className: "HazardDeathEvent",
+    hazardDeathDto: {
+        "hazardTypeDto": "SPIKES" | "NON_HAZARD" | "ACID" | "LAVA" | "PIT",
+    },
+}
+
+export const useHazardDeathEvent = (
+    eventHandler: (event: HazardDeathEvent) => void
+) => {
+    const { connection } = useHkHub();
+
+    useEffect(() => {
+        connection.on("HazardDeathEvent", (event) => {
+            console.log(event);
+            return eventHandler(event);
+        });
+
+        return () => {
+            connection.off("HazardDeathEvent", eventHandler);
+        };
+    }, [connection, eventHandler]);
+};
+
+export type GrubSavedEvent = {
+    grubCount: number;
+}
+
+export const useGrubSavedEvent = (
+    eventHandler: (event: GrubSavedEvent) => void
+) => {
+    const { connection } = useHkHub();
+
+    useEffect(() => {
+        connection.on("GrubSavedEvent", (event) => {
+            console.log(event);
+            return eventHandler(event);
+        });
+
+        return () => {
+            connection.off("GrubSavedEvent", eventHandler);
+        };
+    }, [connection, eventHandler]);
+};
+
+
+export const useDeathEvent = (
+    eventHandler: (event: {}) => void
+) => {
+    const { connection } = useHkHub();
+
+    useEffect(() => {
+        connection.on("DeathEvent", (event) => {
+            console.log(event);
+            return eventHandler(event);
+        });
+
+        return () => {
+            connection.off("DeathEvent", eventHandler);
+        };
+    }, [connection, eventHandler]);
 };
