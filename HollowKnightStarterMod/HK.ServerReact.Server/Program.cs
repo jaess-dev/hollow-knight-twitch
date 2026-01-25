@@ -4,7 +4,7 @@ using HK.ServerReact.Server.Features;
 using HK.ServerReact.Server.Features.HollowKnightFeatures;
 using HK.ServerReact.Server.Features.HollowKnightFeatures.DeathMessageFeature;
 using HK.ServerReact.Server.Features.HollowKnightFeatures.RespawnMessageFeature;
-using HK.ServerReact.Server.Hubs;
+using HK.ServerReact.Server.Features.Hubs;
 using HK.ServerReact.Server.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -59,7 +59,6 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapHub<NotificationsHub>("/hubs/notifications");
 app.MapControllers();
 app.MapFallbackToFile("/index.html");
 features.MapEndpoints(app);

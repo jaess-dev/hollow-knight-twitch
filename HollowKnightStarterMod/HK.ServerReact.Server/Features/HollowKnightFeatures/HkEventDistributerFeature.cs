@@ -1,5 +1,6 @@
 using System.Text.Json;
 using HK.Domain;
+using HK.ServerReact.Server.Features.Hubs;
 
 namespace HK.ServerReact.Server.Features.HollowKnightFeatures;
 
@@ -7,14 +8,17 @@ public class HkEventDistributerFeature() : IFeature
 {
     public void AddServices(IServiceCollection services)
     {
+        services.AddSingleton<HkHubService>();
     }
 
     public void MapEndpoints(WebApplication app)
     {
+        app.MapHub<HkHub>("/hubs/hk");
         app.MapPost("/api/hk/event",
             async (
                 IServiceProvider serviceProvider,
                 ILogger<HkEventDistributerFeature> logger,
+                HkHubService hub,
                 JsonDocument payload
             ) =>
             {
@@ -43,7 +47,9 @@ public class HkEventDistributerFeature() : IFeature
                     }
 
                     var subscribers = serviceProvider.GetRequiredService<IEnumerable<IHkSubscriber<T>>>();
-                    var jobs = subscribers.Select(handler => handler.OnReceivedAsync(@event).AsTask()).ToArray();
+                    var jobs = subscribers.Select(handler => handler.OnReceivedAsync(@event).AsTask())
+                        .Concat([hub.SendEvent(@event)]);
+
                     await Task.WhenAll(jobs);
                 }
             });
