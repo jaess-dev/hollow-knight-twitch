@@ -221,7 +221,10 @@
 }
 
 .soul-container {
-    position: relative;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+
     display: flex;
     align-items: center;
     justify-content: center;

@@ -13,8 +13,8 @@ export const HkOverlay = () => {
 
     useEffect(() => {
         // setCurrentEvent("HAZARD_HIT");
-        setCurrentEvent("GRUB_SAVED");
-        // setCurrentEvent("PLAYER_DEATH");
+        // setCurrentEvent("GRUB_SAVED");
+        setCurrentEvent("PLAYER_DEATH");
     }, []);
 
     const handleEventComplete = () => setCurrentEvent("NONE");
