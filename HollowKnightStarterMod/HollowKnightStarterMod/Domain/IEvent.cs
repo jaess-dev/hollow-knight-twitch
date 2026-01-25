@@ -17,14 +17,20 @@ namespace HK.Domain
     {
         public string ClassName => nameof(GrubSavedEvent);
 
-        public int GrubCount { get; } = grubCount;
+        public int GrubCount { get; set; } = grubCount;
     }
 
 
     public class RespawnEvent(PlayerDataDto playerData) : IEvent
     {
         public string ClassName => nameof(RespawnEvent);
-        public PlayerDataDto playerData { get; } = playerData;
+        public PlayerDataDto playerData { get; set; } = playerData;
 
+    }
+
+    public class HazardDeathEvent(HazardDeathDto hazardDeathDto) : IEvent
+    {
+        public string ClassName => nameof(HazardDeathEvent);
+        public HazardDeathDto HazardDeathDto { get; set; } = hazardDeathDto;
     }
 }

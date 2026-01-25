@@ -26,14 +26,15 @@ public class HkEventDistributerFeature() : IFeature
                     .GetString()
                     ?? throw new BadHttpRequestException("ClassName missing");
 
-                switch (className)
+                await (className switch
                 {
-                    case nameof(DeathEvent):
-                        HandleHkEvent(eventJson.Deserialize<DeathEvent>());
-                        break;
-                }
+                    nameof(DeathEvent) => HandleHkEvent(eventJson.Deserialize<DeathEvent>()),
+                    nameof(RespawnEvent) => HandleHkEvent(eventJson.Deserialize<RespawnEvent>()),
+                    nameof(HazardDeathEvent) => HandleHkEvent(eventJson.Deserialize<HazardDeathEvent>()),
+                    _ => Task.CompletedTask,
+                });
 
-                void HandleHkEvent<T>(T? @event) where T : IEvent
+                async Task HandleHkEvent<T>(T? @event) where T : IEvent
                 {
                     if (@event is null)
                     {
@@ -41,10 +42,9 @@ public class HkEventDistributerFeature() : IFeature
                         return;
                     }
 
-                    foreach (var handler in serviceProvider.GetRequiredService<IEnumerable<IHkSubscriber<T>>>())
-                    {
-                        handler.OnReceived(@event);
-                    }
+                    var subscribers = serviceProvider.GetRequiredService<IEnumerable<IHkSubscriber<T>>>();
+                    var jobs = subscribers.Select(handler => handler.OnReceivedAsync(@event).AsTask()).ToArray();
+                    await Task.WhenAll(jobs);
                 }
             });
     }

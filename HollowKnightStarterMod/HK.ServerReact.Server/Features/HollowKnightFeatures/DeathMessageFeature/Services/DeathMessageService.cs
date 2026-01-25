@@ -10,7 +10,7 @@ public sealed class DeathMessageService(
 {
     private readonly DeathMessageContainer _messages = messages;
 
-    public async void OnReceived(DeathEvent @event)
+    public async ValueTask OnReceivedAsync(DeathEvent @event)
     {
         var random = new Random();
         string message = _messages[random.Next(_messages.Length)];

@@ -10,5 +10,6 @@ namespace HK.Domain
         Task SendGeoEventAsync(int amountGained, int totalGeo);
         Task SendGrubSavedAsync(int grubCount);
         Task SendRespawnAsync(PlayerDataDto playerData);
+        Task SendDiedFromHazardAsync(HazardDeathDto hazardDeathDto);
     }
 }

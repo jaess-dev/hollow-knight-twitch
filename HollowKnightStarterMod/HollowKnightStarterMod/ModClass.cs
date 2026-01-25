@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using GlobalEnums;
 using HK.Domain;
 using HollowKnightStarterMod.Domain.Model;
 using Modding;
@@ -49,7 +50,7 @@ public class HollowKnightStarterMod : Mod
         On.HeroController.DieFromHazard += (org, self, hazardType, angle) =>
         {
             var res = org(self, hazardType, angle);
-            Log($"Died from hazard {hazardType} with float: {angle}");
+            OnDieFromHazard(self, hazardType, angle);
             return res;
         };
 
@@ -66,17 +67,29 @@ public class HollowKnightStarterMod : Mod
         };
     }
 
-    private void OnRespawn(HeroController self)
+    /// <summary>
+    /// Event gets fired every time we are killed by something and need to be respawned.
+    /// For example when we fall onto spikes.
+    /// </summary>
+    private void OnDieFromHazard(HeroController self, HazardType hazardType, float angle)
     {
-        SendOffCatching(() => _connector.SendRespawnAsync(ToDto(self.playerData)));
+        SendOffCatching(() => _connector.SendDiedFromHazardAsync(new HazardDeathDto(hazardType switch
+        {
+            HazardType.NON_HAZARD => HazardTypeDto.NON_HAZARD,
+            HazardType.ACID => HazardTypeDto.ACID,
+            HazardType.LAVA => HazardTypeDto.LAVA,
+            HazardType.PIT => HazardTypeDto.PIT,
+            HazardType.SPIKES => HazardTypeDto.SPIKES,
+            _ => throw new ArgumentException($"Unknown enum {hazardType}"),
+        })));
     }
 
-    private PlayerDataDto ToDto(PlayerData playerData)
+    private void OnRespawn(HeroController self)
     {
-        return new PlayerDataDto(
-            playerData.geo,
-            playerData.grubsCollected
-        );
+        SendOffCatching(() => _connector.SendRespawnAsync(new PlayerDataDto(
+            self.playerData.geo,
+            self.playerData.grubsCollected
+        )));
     }
 
     private async void OnGrubSaved(int grubCount)

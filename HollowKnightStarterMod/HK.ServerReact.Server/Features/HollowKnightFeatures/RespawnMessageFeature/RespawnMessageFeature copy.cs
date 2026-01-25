@@ -20,9 +20,10 @@ public sealed class PlayerDataService(ILogger<PlayerDataService> logger) : IHkSu
 {
     private PlayerDataDto? PlayerData { get; set; }
 
-    public async void OnReceived(RespawnEvent @event)
+    public ValueTask OnReceivedAsync(RespawnEvent @event)
     {
         PlayerData = @event.playerData;
         logger.LogInformation("Player Data set {PlayerData}", PlayerData);
+        return ValueTask.CompletedTask;
     }
 }

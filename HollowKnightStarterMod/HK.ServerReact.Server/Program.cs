@@ -12,6 +12,7 @@ FeatureProvider features = [
     new HkEventDistributerFeature(),
     new DeathMessageFeature(),
     new RespawnMessageFeature(),
+    new HazardResponseFeature(),
 ];
 
 var builder = WebApplication.CreateBuilder(args);

@@ -28,6 +28,10 @@ public class BotConnectorServices(
         }
     }
 
+    public Task SendDiedFromHazardAsync(HazardDeathDto hazardDeathDto)
+    {
+        return Task.CompletedTask;
+    }
 
     public Task SendGrubSavedAsync(int grubCount)
     {
