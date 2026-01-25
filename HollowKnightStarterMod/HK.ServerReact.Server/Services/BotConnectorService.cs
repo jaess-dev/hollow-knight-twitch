@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using HK.Domain;
+using HollowKnightStarterMod.Domain.Model;
 
 namespace HK.ServerReact.Server.Services;
 
@@ -25,6 +26,20 @@ public class BotConnectorServices(
         {
             _logger.LogError("Failed to send webhook: {EXCEPTION}", ex);
         }
+    }
+
+
+    public Task SendGrubSavedAsync(int grubCount)
+    {
+        return Task.CompletedTask;
+    }
+    public Task SendRespawnAsync()
+    {
+        return Task.CompletedTask;
+    }
+    public Task SendRespawnAsync(PlayerDataDto playerData)
+    {
+        return Task.CompletedTask;
     }
 
     public async Task SendGeoEventAsync(int amountGained, int totalGeo)
@@ -79,4 +94,5 @@ public class BotConnectorServices(
             content
         );
     }
+
 }

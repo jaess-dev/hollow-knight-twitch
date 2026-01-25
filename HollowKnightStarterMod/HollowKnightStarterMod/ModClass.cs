@@ -6,10 +6,13 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using HK.Domain;
+using HollowKnightStarterMod.Domain.Model;
 using Modding;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace HollowKnightStarterMod;
@@ -21,32 +24,41 @@ public class HollowKnightStarterMod : Mod
     {
     }
 
-    public override string GetVersion() => "v0.0.2";
+    public override string GetVersion() => "v0.0.3";
 
-    static HollowKnightStarterMod()
-    {
-        AppDomain.CurrentDomain.AssemblyResolve += ResolveEmbeddedAssembly;
-    }
 
     public override void Initialize()
     {
-
         _connector = new ServerConnector(new(), LogError);
         // On.HeroController.AddGeo += OnAddGeo;
         On.HeroController.Die += (On.HeroController.orig_Die org, HeroController self) =>
         {
             var res = org(self);
-            OnDeath(org, self);
+            OnDeath(self);
             return res;
         };
 
-        // On.HeroController.Respawn
+        On.HeroController.Respawn += (org, self) =>
+        {
+            var res = org(self);
+            OnRespawn(self);
+            Log("This was a respawn");
+            return res;
+        };
+
+        On.HeroController.DieFromHazard += (org, self, hazardType, angle) =>
+        {
+            var res = org(self, hazardType, angle);
+            Log($"Died from hazard {hazardType} with float: {angle}");
+            return res;
+        };
 
         ModHooks.SetPlayerIntHook += (string fieldName, int value) =>
         {
             switch (fieldName)
             {
                 case Constants.GRUBS_COLLECTED:
+                    OnGrubSaved(value);
                     break;
             }
 
@@ -54,35 +66,49 @@ public class HollowKnightStarterMod : Mod
         };
     }
 
-    private void OnDeath(On.HeroController.orig_Die org, HeroController self)
+    private void OnRespawn(HeroController self)
     {
-        _ = _connector.SendYouDiedAsync();
+        SendOffCatching(() => _connector.SendRespawnAsync(ToDto(self.playerData)));
     }
 
-    private void OnAddGeo(On.HeroController.orig_AddGeo orig, HeroController self, int amount)
+    private PlayerDataDto ToDto(PlayerData playerData)
     {
-        orig(self, amount);
-        if (amount <= 0)
-            return;
-
-        _ = _connector.SendGeoEventAsync(amount, self.playerData.geo);
+        return new PlayerDataDto(
+            playerData.geo,
+            playerData.grubsCollected
+        );
     }
 
-    private static Assembly? ResolveEmbeddedAssembly(object? sender, ResolveEventArgs args)
+    private async void OnGrubSaved(int grubCount)
     {
-        string resourceName = Assembly.GetExecutingAssembly()
-            .GetManifestResourceNames()
-            .FirstOrDefault(r => r.EndsWith("HK.Domain.dll"));
+        SendOffCatching(() => _connector.SendGrubSavedAsync(grubCount));
+    }
 
-        if (resourceName == null)
-            return null;
+    private void OnDeath(HeroController _)
+    {
+        SendOffCatching(_connector.SendYouDiedAsync);
+    }
 
-        using Stream stream =
-            Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName)!;
+    /// <summary>
+    /// Takes an async function, awaits it, and catches any thrown exception while logging it.
+    /// </summary>
+    /// <param name="fun">The async function to await and catch errors from.</param>
+    private async void SendOffCatching(Func<Task> fun)
+    {
+        try
+        {
+            await fun();
+        }
+        catch (Exception ex)
+        {
+            LogError($"Exception thrown during send off {ex}");
+        }
+    }
 
-        byte[] buffer = new byte[stream.Length];
-        stream.Read(buffer, 0, buffer.Length);
-
-        return Assembly.Load(buffer);
+    private Dictionary<string, object> ToDictionary(object obj)
+    {
+        return JsonConvert.DeserializeObject<Dictionary<string, object>>(
+            JsonConvert.SerializeObject(obj)
+        );
     }
 }

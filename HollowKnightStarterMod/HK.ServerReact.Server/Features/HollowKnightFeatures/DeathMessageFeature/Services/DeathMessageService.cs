@@ -1,5 +1,4 @@
 using HK.Domain;
-using HK.ServerReact.Server.Features.HollowKnightFeatures;
 using HK.ServerReact.Server.Features.HollowKnightFeatures.DeathMessageFeature.Models;
 using HK.ServerReact.Server.Services;
 

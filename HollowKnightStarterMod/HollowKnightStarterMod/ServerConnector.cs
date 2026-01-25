@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using HK.Domain;
+using HollowKnightStarterMod.Domain.Model;
 
 namespace HollowKnightStarterMod
 {
@@ -11,16 +13,13 @@ namespace HollowKnightStarterMod
         private readonly HttpClient _httpClient = value;
         private readonly Action<string> _logError = logError;
 
-        public Task SendGeoEventAsync(int amountGained, int totalGeo)
-        {
-            // throw new System.NotImplementedException();
-            return Task.CompletedTask;
-        }
+        public Task SendGeoEventAsync(int amountGained, int totalGeo) => Task.CompletedTask;
+        public Task SendYouDiedAsync() => TransmitEventAsync(new DeathEvent());
+        public Task SendGrubSavedAsync(int grubCount) => TransmitEventAsync(new GrubSavedEvent(grubCount));
 
-        public async Task SendYouDiedAsync()
-        {
-            await TransmitEventAsync(new DeathEvent());
-        }
+        public Task SendRespawnAsync(PlayerDataDto playerData) => TransmitEventAsync(new RespawnEvent(playerData
+            ));
+
 
         private async Task TransmitEventAsync(IEvent @event)
         {

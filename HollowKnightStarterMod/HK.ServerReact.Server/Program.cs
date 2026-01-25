@@ -3,6 +3,7 @@ using HK.Domain;
 using HK.ServerReact.Server.Features;
 using HK.ServerReact.Server.Features.HollowKnightFeatures;
 using HK.ServerReact.Server.Features.HollowKnightFeatures.DeathMessageFeature;
+using HK.ServerReact.Server.Features.HollowKnightFeatures.RespawnMessageFeature;
 using HK.ServerReact.Server.Hubs;
 using HK.ServerReact.Server.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 FeatureProvider features = [
     new HkEventDistributerFeature(),
     new DeathMessageFeature(),
+    new RespawnMessageFeature(),
 ];
 
 var builder = WebApplication.CreateBuilder(args);
