@@ -17,7 +17,7 @@ public class KobeFeature : IFeature
 
     public void MapEndpoints(WebApplication app) { }
 
-    public class KobeCsEventSub(BotConnectorServices bot) : ICsEventSubscriber<CEPlayerGotKill>
+    public class KobeCsEventSub(IBotConnectorServices bot) : ICsEventSubscriber<CEPlayerGotKill>
     {
         public async ValueTask OnEvent(CEPlayerGotKill data)
         {
@@ -38,8 +38,7 @@ public class ThatsHotFeature : IFeature
 
     public void MapEndpoints(WebApplication app) { }
 
-    public class ThatsHotEventSub(
-        BotConnectorServices bot) : ICsEventSubscriber<CEPlayerDied>
+    public class ThatsHotEventSub() : ICsEventSubscriber<CEPlayerDied>
     {
         public async ValueTask OnEvent(CEPlayerDied data)
         {

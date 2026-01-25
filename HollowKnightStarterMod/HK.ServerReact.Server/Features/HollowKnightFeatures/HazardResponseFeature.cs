@@ -32,7 +32,7 @@ public sealed class HazardResponseFeature(Dictionary<string, string[]>? hazardMe
 }
 
 public sealed class HazardResponseMessage(
-    BotConnectorServices botConnector,
+    IBotConnectorServices botConnector,
     HazardMessageContainer messages) : IHkSubscriber<HazardDeathEvent>
 {
     private readonly HazardMessageContainer _messages = messages;

@@ -48,7 +48,18 @@ builder.Services.AddOpenApi();
 builder.Services.AddSignalR();
 builder.Services.AddHttpClient();
 
-builder.Services.AddSingleton<BotConnectorServices>();
+builder.Services.AddSingleton(static sp =>
+{
+    var url = sp.GetRequiredService<IConfiguration>().GetSection("WebSocket").Get<string>() ?? "ws://localhost:8080";
+    return new WebSocketService(new Uri(url), sp.GetRequiredService<ILogger<WebSocketService>>());
+});
+builder.Services.AddSingleton<IWebSocketService>(sp =>
+    sp.GetRequiredService<WebSocketService>());
+builder.Services.AddSingleton<IBotConnectorServices, BotWsConnectorService>();
+
+// builder.Services.AddHostedService<WebSocketHostedService>();
+
+
 features.AddServices(builder.Services);
 
 var app = builder.Build();
@@ -74,7 +85,7 @@ app.MapFallbackToFile("/index.html");
 features.MapEndpoints(app);
 
 app.MapPost("/api/twitch/message", async (
-    BotConnectorServices botConnector,
+    IBotConnectorServices botConnector,
     ILogger<Program> logger,
     [FromBody] MessageDot payload) =>
 {
