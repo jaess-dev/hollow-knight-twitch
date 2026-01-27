@@ -10,31 +10,42 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using GlobalEnums;
-using HK.Domain;
-using HollowKnightDeathCounterMod.Domain.Model;
 using Modding;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace HollowKnightDeathCounterMod;
-
-public class HollowKnightDeathCounterMod : Mod
+namespace HollowKnightDeathCounterMod
 {
-    private ICommunication _connector;
-    public HollowKnightDeathCounterMod() : base("HkDeathCounter")
+    public class HollowKnightDeathCounterMod() : Mod("HkDeathCounter"), ILocalSettings<LocalSettings>
     {
+        public override string GetVersion() => "v0.0.1";
+
+        public LocalSettings LocalSettings { get; set; }
+
+        public override void Initialize()
+        {
+            On.HeroController.Die += (On.HeroController.orig_Die org, HeroController self) =>
+            {
+                Died();
+                return org(self);
+            };
+
+            Log($"Initialized {Name}");
+        }
+
+        private void Died()
+        {
+            Log($"Death counter before incrementing {LocalSettings.DeathCounter}");
+            LocalSettings.DeathCounter += 1;
+            Log($"Death counter increased to {LocalSettings.DeathCounter}");
+        }
+
+        public void OnLoadLocal(LocalSettings s) => LocalSettings = s;
+        public LocalSettings OnSaveLocal() => LocalSettings;
     }
 
-    public override string GetVersion() => "v0.0.1";
-
-
-    public override void Initialize()
+    public class LocalSettings
     {
-        On.HeroController.Die += (On.HeroController.orig_Die org, HeroController self) =>
-        {
-            var res = org(self);
-            OnDeath(self);
-            return res;
-        };
+        public int DeathCounter { get; set; } = 0;
     }
 }

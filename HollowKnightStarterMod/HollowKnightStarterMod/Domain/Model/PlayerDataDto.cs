@@ -2,7 +2,8 @@ namespace HollowKnightStarterMod.Domain.Model
 {
     public record PlayerDataDto(
         int Geo,
-        int GrubsCollected)
+        int GrubsCollected,
+        int? deathCount)
     {
 
     }

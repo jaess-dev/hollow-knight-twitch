@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="HollowKnightDeathCounterMod/HollowKnightDeathCounterMod.csproj" />
   <Project Path="HollowKnightStarterMod/HollowKnightStarterMod.csproj" />
   <Project Path="hk.serverreact.client/hk.serverreact.client.esproj">
     <Build />

@@ -20,9 +20,12 @@ namespace HollowKnightStarterMod;
 
 public class HollowKnightStarterMod : Mod
 {
+    private readonly HkDeathCounterAdapter _deathCounter;
     private ICommunication _connector;
+
     public HollowKnightStarterMod() : base("HkEventDistributer")
     {
+        _deathCounter = new HkDeathCounterAdapter(Log);
     }
 
     public override string GetVersion() => "v0.0.3";
@@ -43,7 +46,6 @@ public class HollowKnightStarterMod : Mod
         {
             var res = org(self);
             OnRespawn(self);
-            Log("This was a respawn");
             return res;
         };
 
@@ -86,9 +88,16 @@ public class HollowKnightStarterMod : Mod
 
     private void OnRespawn(HeroController self)
     {
+        int? dc = _deathCounter.ReadDeathCounter();
+
+        Log(dc is not null
+            ? $"Got the death counter of {dc}"
+            : $"Could not fetch the death counter!");
+
         SendOffCatching(() => _connector.SendRespawnAsync(new PlayerDataDto(
             self.playerData.geo,
-            self.playerData.grubsCollected
+            self.playerData.grubsCollected,
+            dc
         )));
     }
 
