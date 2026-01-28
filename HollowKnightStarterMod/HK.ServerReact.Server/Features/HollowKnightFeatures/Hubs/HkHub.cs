@@ -15,10 +15,11 @@ public class HkHub : Hub
     }
 }
 
-public class HkHubService(IHubContext<HkHub> _hubContext)
+public class HkHubService(IHubContext<HkHub> _hubContext, ILogger<HkHubService> logger)
 {
     public async Task SendEvent<T>(T @event) where T : IEvent
     {
+        logger.LogInformation("Sending event {EVENT}", @event);
         await _hubContext.Clients.All.SendAsync(@event.ClassName, Serialize(@event));
     }
 

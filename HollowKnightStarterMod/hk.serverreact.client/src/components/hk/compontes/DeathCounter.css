@@ -1,0 +1,36 @@
+.hk-death-counter-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    font-family: serif;
+    z-index: 1000;
+}
+
+.hk-death-counter-panel {
+    background: rgba(20, 20, 30, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(200, 200, 230, 0.2);
+    box-shadow: 0 0 30px rgba(150, 150, 200, 0.15);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 4px;
+}
+
+.hk-death-counter-skull {
+    font-size: 32px;
+    filter: drop-shadow(0 0 8px rgba(200, 200, 230, 0.4));
+}
+
+.hk-death-counter-value {
+    font-size: 36px;
+    font-weight: 300;
+    color: rgba(230, 230, 255, 0.95);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 15px rgba(200, 200, 255, 0.5);
+    min-width: 40px;
+    text-align: right;
+}

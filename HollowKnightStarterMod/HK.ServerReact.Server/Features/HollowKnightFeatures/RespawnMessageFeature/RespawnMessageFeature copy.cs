@@ -22,7 +22,7 @@ public sealed class PlayerDataService(ILogger<PlayerDataService> logger) : IHkSu
 
     public ValueTask OnReceivedAsync(RespawnEvent @event)
     {
-        PlayerData = @event.playerData;
+        PlayerData = @event.PlayerData;
         logger.LogInformation("Player Data set {PlayerData}", PlayerData);
         return ValueTask.CompletedTask;
     }

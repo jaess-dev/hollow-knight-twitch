@@ -14,6 +14,7 @@ IFeature[] hkFeatures = [
     new DeathMessageFeature(),
     new RespawnMessageFeature(),
     new HazardResponseFeature(),
+    new DeathCounterFeature(),
 ];
 IFeature[] csFeatures = [
     new CsEventDistributer(),

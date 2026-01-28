@@ -42,12 +42,12 @@ public class HollowKnightStarterMod : Mod
             return res;
         };
 
-        On.HeroController.Respawn += (org, self) =>
-        {
-            var res = org(self);
-            OnRespawn(self);
-            return res;
-        };
+        // On.HeroController.Respawn += (org, self) =>
+        // {
+        //     var res = org(self);
+        //     OnRespawn(self);
+        //     return res;
+        // };
 
         On.HeroController.DieFromHazard += (org, self, hazardType, angle) =>
         {

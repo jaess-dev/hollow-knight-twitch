@@ -24,7 +24,7 @@ namespace HK.Domain
     public class RespawnEvent(PlayerDataDto playerData) : IEvent
     {
         public string ClassName => nameof(RespawnEvent);
-        public PlayerDataDto playerData { get; set; } = playerData;
+        public PlayerDataDto PlayerData { get; set; } = playerData;
 
     }
 

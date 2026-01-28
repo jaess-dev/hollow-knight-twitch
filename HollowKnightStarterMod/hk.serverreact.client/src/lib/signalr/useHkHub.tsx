@@ -106,3 +106,27 @@ export const useDeathEvent = (
         };
     }, [connection, eventHandler]);
 };
+
+
+export const useRespawnEvent = (
+    eventHandler: (event: {
+        playerData: {
+            geo: number,
+            grubsCollected: number,
+            deathCount?: number
+        }
+    }) => void
+) => {
+    const { connection } = useHkHub();
+
+    useEffect(() => {
+        connection.on("RespawnEvent", (event) => {
+            console.log(event);
+            return eventHandler(event);
+        });
+
+        return () => {
+            connection.off("RespawnEvent", eventHandler);
+        };
+    }, [connection, eventHandler]);
+};
