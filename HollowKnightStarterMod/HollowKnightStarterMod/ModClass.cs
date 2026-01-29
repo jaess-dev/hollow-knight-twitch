@@ -18,10 +18,12 @@ using UnityEngine;
 
 namespace HollowKnightStarterMod;
 
-public class HollowKnightStarterMod : Mod
+public class HollowKnightStarterMod : Mod, ILocalSettings<ModSettings>
 {
     private readonly HkDeathCounterAdapter _deathCounter;
     private ICommunication _connector;
+
+    public ModSettings ModSettings { get; set; }
 
     public HollowKnightStarterMod() : base("HkEventDistributer")
     {
@@ -33,7 +35,7 @@ public class HollowKnightStarterMod : Mod
 
     public override void Initialize()
     {
-        _connector = new ServerConnector(new(), LogError);
+        _connector = new ServerConnector(new(), LogError, ModSettings.Host);
         // On.HeroController.AddGeo += OnAddGeo;
         On.HeroController.Die += (On.HeroController.orig_Die org, HeroController self) =>
         {
@@ -41,13 +43,6 @@ public class HollowKnightStarterMod : Mod
             OnDeath(self);
             return res;
         };
-
-        // On.HeroController.Respawn += (org, self) =>
-        // {
-        //     var res = org(self);
-        //     OnRespawn(self);
-        //     return res;
-        // };
 
         On.HeroController.DieFromHazard += (org, self, hazardType, angle) =>
         {
@@ -133,4 +128,7 @@ public class HollowKnightStarterMod : Mod
             JsonConvert.SerializeObject(obj)
         );
     }
+
+    public void OnLoadLocal(ModSettings s) => ModSettings = s;
+    public ModSettings OnSaveLocal() => ModSettings;
 }

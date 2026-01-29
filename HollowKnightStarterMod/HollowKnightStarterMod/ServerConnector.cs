@@ -8,10 +8,12 @@ using HollowKnightStarterMod.Domain.Model;
 
 namespace HollowKnightStarterMod
 {
-    public class ServerConnector(HttpClient value, Action<string> logError) : ICommunication
+    public class ServerConnector(HttpClient value, Action<string> logError, string host) : ICommunication
     {
         private readonly HttpClient _httpClient = value;
         private readonly Action<string> _logError = logError;
+        private readonly string _host = host;
+
 
         public Task SendGeoEventAsync(int amountGained, int totalGeo) => Task.CompletedTask;
         public Task SendYouDiedAsync() => TransmitEventAsync(new DeathEvent());
@@ -20,6 +22,7 @@ namespace HollowKnightStarterMod
         public Task SendDiedFromHazardAsync(HazardDeathDto hazardDeathDto) => TransmitEventAsync(new HazardDeathEvent(hazardDeathDto));
 
 
+        private readonly string _eventEndpoint = $"{host}/api/hk/event";
         private async Task TransmitEventAsync(IEvent @event)
         {
             var payload = new { @event };
@@ -27,7 +30,7 @@ namespace HollowKnightStarterMod
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(payload);
             using StringContent content = new(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _httpClient.PostAsync(
-                "https://localhost:54024/api/hk/event",
+                _eventEndpoint,
                 content
             );
         }
