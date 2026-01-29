@@ -3,6 +3,7 @@ import "./ChatOverlay.css";
 import { SocialBar } from './socials/Socialbar';
 import { ChatFeedOverlay } from './chat/ChatFeedOverlay';
 import type { Message } from './chat/types';
+import { SocialMiniBar } from './socials/SocialMiniBar';
 
 interface ChatOverlayProps {
     backgroundImage?: string; // Optional prop to set background image
@@ -124,7 +125,7 @@ const GameOverlay: React.FC<ChatOverlayProps> = ({ backgroundImage }) => {
                     <div className='hole' />
                     <ChatFeedOverlay messages={messages} chatMessagesRef={chatMessagesRef} />
                 </div>
-                <SocialBar />
+                <SocialMiniBar />
             </div>
         </>
     );
