@@ -1,0 +1,27 @@
+ :root {
+     --neon-cyan: #00ff41;
+     --neon-pink: #39ff14;
+     --neon-purple: #00ff88;
+     --dark-bg: #0a1e0a;
+     --darker-bg: #051108;
+     --chat-bg: rgba(10, 30, 10, 0.95);
+     --text-primary: #e0ffe7;
+     --text-secondary: #8ba394;
+     --factor: 60;
+ }
+
+ * {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+ }
+
+ body {
+     font-family: 'Share Tech Mono', monospace;
+     /* Fallback gradient if no image */
+     color: var(--text-primary);
+     overflow: hidden;
+     width: 1920px;
+     height: 1080px;
+     position: fixed;
+ }

@@ -1,0 +1,98 @@
+/* Container */
+.chat-feed-overlay {
+    position: absolute;
+    top: 100px;
+    right: 30px;
+
+    width: 420px;
+    max-height: 380px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* Individual message */
+.chat-feed-message {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px 10px;
+
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(4px);
+
+    border-left: 3px solid var(--neon-pink);
+    box-shadow: 0 0 12px rgba(255, 0, 255, 0.25);
+
+    animation: feedSlideIn 0.25s ease-out;
+}
+
+/* Animations */
+@keyframes feedSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Username */
+.chat-feed-username {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 6px var(--neon-cyan);
+}
+
+/* Badges */
+.chat-feed-badge {
+    font-size: 9px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+.badge-mod {
+    background: #ff0066;
+    color: #06010a;
+    box-shadow: 0 0 6px #ff0066;
+}
+
+.badge-sub {
+    background: #00ff99;
+    color: #02110a;
+    box-shadow: 0 0 6px #00ff99;
+}
+
+.badge-vip {
+    background: #ffaa00;
+    color: #120900;
+    box-shadow: 0 0 6px #ffaa00;
+}
+
+/* Message text */
+.chat-feed-text {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #eafff4;
+}
+
+/* Timestamp (optional, subtle) */
+.chat-feed-timestamp {
+    margin-left: auto;
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.4);
+}

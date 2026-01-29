@@ -1,0 +1,110 @@
+.overlay-container {
+  width: 1920px;
+  height: 1080px;
+  position: relative;
+  /* This creates the backdrop for everything */
+  background: transparent;
+}
+
+.main-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* Camera Window - TRANSPARENT - creates a "hole" in the overlay */
+.camera-window {
+  width: calc(16px * var(--factor));
+  height: calc(9px * var(--factor));
+  position: absolute;
+  top: 45%;
+  left: 150px;
+  transform: translateY(-50%);
+  /* Key change: background is transparent, not using the body background */
+  background: transparent;
+  /* Use mix-blend-mode to create a true transparency effect */
+  isolation: isolate;
+  border: 3px solid var(--neon-pink);
+  box-shadow: 0 0 30px rgba(57, 255, 20, 0.4), inset 0 0 30px rgba(57, 255, 20, 0.05);
+  animation: cameraGlow 3s ease-in-out infinite alternate;
+  clip-path: polygon(0 35px, 35px 0, 100% 0, 100% calc(100% - 35px), calc(100% - 35px) 100%, 0 100%);
+}
+
+
+
+/* Create a mask effect for the camera window */
+.camera-window::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: transparent;
+  z-index: -1;
+}
+
+@keyframes cameraGlow {
+  0% {
+    box-shadow: 0 0 30px rgba(57, 255, 20, 0.4), inset 0 0 30px rgba(57, 255, 20, 0.05);
+  }
+
+  100% {
+    box-shadow: 0 0 50px rgba(57, 255, 20, 0.6), inset 0 0 40px rgba(57, 255, 20, 0.1);
+  }
+}
+
+.camera-label {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+  padding: 8px 16px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 12px;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  box-shadow: 0 0 20px var(--neon-pink);
+  z-index: 10;
+}
+
+.camera-frame-corner {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  border: 3px solid var(--neon-pink);
+}
+
+.corner-tl {
+  top: -3px;
+  left: -3px;
+  border-right: none;
+  border-bottom: none;
+  box-shadow: -8px -8px 15px rgba(57, 255, 20, 0.3);
+}
+
+.corner-tr {
+  top: -3px;
+  right: -3px;
+  border-left: none;
+  border-bottom: none;
+  box-shadow: 8px -8px 15px rgba(57, 255, 20, 0.3);
+}
+
+.corner-bl {
+  bottom: -3px;
+  left: -3px;
+  border-right: none;
+  border-top: none;
+  box-shadow: -8px 8px 15px rgba(57, 255, 20, 0.3);
+}
+
+.corner-br {
+  bottom: -3px;
+  right: -3px;
+  border-left: none;
+  border-top: none;
+  box-shadow: 8px 8px 15px rgba(57, 255, 20, 0.3);
+}
