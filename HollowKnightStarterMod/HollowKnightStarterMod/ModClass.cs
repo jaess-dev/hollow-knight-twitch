@@ -23,7 +23,7 @@ public class HollowKnightStarterMod : Mod, ILocalSettings<ModSettings>
     private readonly HkDeathCounterAdapter _deathCounter;
     private ICommunication _connector;
 
-    public ModSettings ModSettings { get; set; }
+    public ModSettings ModSettings { get; set; } = new ModSettings();
 
     public HollowKnightStarterMod() : base("HkEventDistributer")
     {
