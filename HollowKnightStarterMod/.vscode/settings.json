@@ -8,5 +8,7 @@
         "**/bin": true,
         "**/obj": true,
         "**/node_modules": true,
+        "**/.env": true,
+        "**/tokens.json": true,
     }
 }

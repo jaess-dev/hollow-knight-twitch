@@ -1,6 +1,4 @@
-using System.Text.Json;
 using DotNetEnv;
-using HK.Domain;
 using HK.ServerReact.Server.Config;
 using HK.ServerReact.Server.Features;
 using HK.ServerReact.Server.Features.CounterStrikeFeatures;
@@ -8,6 +6,7 @@ using HK.ServerReact.Server.Features.HollowKnightFeatures;
 using HK.ServerReact.Server.Features.HollowKnightFeatures.DeathMessageFeature;
 using HK.ServerReact.Server.Features.HollowKnightFeatures.RespawnMessageFeature;
 using HK.ServerReact.Server.Features.TwClient;
+using HK.ServerReact.Server.Features.TwClient.Subs;
 using HK.ServerReact.Server.Services;
 using HK.ServerReact.Server.Services.TwitchConnection;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +24,9 @@ IFeature[] csFeatures = [
     new ThatsHotFeature(),
 ];
 FeatureProvider features = [
-    new TwitchSubscriptionFeature(),
+    new TwitchSubscriptionFeature([
+        typeof(MemberBerries),
+    ]),
     ..hkFeatures,
     ..csFeatures,
 ];
@@ -38,6 +39,7 @@ string targetChannel = Environment.GetEnvironmentVariable("TARGET_CHANNEL")!;
 string botName = Environment.GetEnvironmentVariable("BOT_NAME")!;
 string clientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET")!;
 string clientId = Environment.GetEnvironmentVariable("CLIENT_ID")!;
+
 
 builder.Services
     .ConfigureServices()
