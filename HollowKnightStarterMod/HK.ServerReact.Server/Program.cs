@@ -27,6 +27,7 @@ FeatureProvider features = [
     new TwitchSubscriptionFeature([
         typeof(MemberBerries),
         typeof(LurkSubscription),
+        typeof(MisreadCounter),
     ]),
     ..hkFeatures,
     ..csFeatures,
@@ -44,6 +45,10 @@ string clientId = Environment.GetEnvironmentVariable("CLIENT_ID")!;
 builder.Services.AddKeyedSingleton(
     LurkSubscription.LurkSubscriptionTemplateMessagesDiKey, 
     static (sp, obj) => sp.GetRequiredService<IConfiguration>().GetSection("LurkTemplates").Get<string[]?>() ?? []);
+
+builder.Services.AddKeyedSingleton(
+    MisreadCounter.MisreadCounterMessageTemplatesDiKey, 
+    static (sp, obj) => sp.GetRequiredService<IConfiguration>().GetSection("MisreadTemplate").Get<Dictionary<string, string[]>>() ?? []);
 
 builder.Services
     .ConfigureServices()

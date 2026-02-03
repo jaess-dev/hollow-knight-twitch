@@ -58,11 +58,6 @@ internal static class ConfigurationExtensions
             self.AddKeyedSingleton(DiKeys.CLIENT_SECRET, clientSecret);
             self.AddKeyedSingleton(DiKeys.CLIENT_ID, clientId);
 
-            if (useBaseSubscription)
-            {
-                self.AddSingleton<ITwitchClientSubscriber, BaseSubscriptions>();
-            }
-
             self.AddSingleton<ITwitchClient, TwitchClient>(sp => new(protocol: TwitchLib.Client.Enums.ClientProtocol.WebSocket));
             // self.AddSingleton<IBotMessageSender, TwitchService>();
             self.AddHostedService<TwitchClientHostedService>();

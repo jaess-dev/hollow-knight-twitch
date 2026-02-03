@@ -1,16 +1,9 @@
 using System.Text;
-using HK.ServerReact.Server.Features.TwClient.Hubs;
-using HK.ServerReact.Server.Services.TwitchConnection;
 using HK.ServerReact.Server.Util;
-using twitch_con.TwClient;
-using TwitchLib.Client.Events;
 using TwitchLib.Client.Interfaces;
 using TwitchLib.Client.Models;
 
-
 namespace HK.ServerReact.Server.Features.TwClient.Subs;
-
-
 
 public class LurkSubscription(
     ILogger<LurkSubscription> logger,

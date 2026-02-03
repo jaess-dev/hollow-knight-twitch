@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using HK.ServerReact.Server.Features.TwClient.Hubs;
 using HK.ServerReact.Server.Services.TwitchConnection;
 using twitch_con.TwClient;
@@ -26,6 +27,8 @@ public class BaseSubscriptions(
     private readonly IMessageHandler[] _messageHandlers = messageHandlers.ToArray();
     private readonly TwitchHubService _twitchHub = twitchHub;
     private ITwitchClient _client = null!;
+
+    private readonly ConcurrentDictionary<string, bool> _handledMessageIds = [];
 
 
     public void Sub(ITwitchClient client)
@@ -63,6 +66,17 @@ public class BaseSubscriptions(
     async Task Client_OnMessageReceived(object? sender, OnMessageReceivedArgs e)
     {
         ChatMessage message = e.ChatMessage;
+
+        if (!_handledMessageIds.TryAdd(message.Id, true))
+        {
+            _logger.LogInformation(
+                "Got message twice -> {USERNAME}#{CHANNEL}: {MESSAGE}",
+                message.Username,
+                message.Channel,
+                message.Message);
+            return;
+        }
+
         _logger.LogInformation(
             "{USERNAME}#{CHANNEL}: {MESSAGE}",
             message.Username,
