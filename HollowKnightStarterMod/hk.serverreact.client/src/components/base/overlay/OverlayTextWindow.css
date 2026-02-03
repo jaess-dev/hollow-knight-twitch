@@ -1,0 +1,217 @@
+/* ─── Screen Overlay ────────────────────────────────────────────────────────── */
+
+.screen-overlay {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  /* Match camera window size exactly: 16 * 60 = 960, 9 * 60 = 540 */
+  width: 960px;
+  height: 540px;
+  /* Transparent background — this is the "window" */
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ─── Floating Particles ────────────────────────────────────────────────────── */
+
+.screen-particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: particleDrift linear infinite;
+  pointer-events: none;
+}
+
+@keyframes particleDrift {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(
+      calc((var(--drift-x, 60px))),
+      calc((var(--drift-y, -80px)))
+    ) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* ─── Central Content Card ──────────────────────────────────────────────────── */
+
+.screen-content {
+  position: relative;
+  width: 700px;
+  height: 420px;
+  border: 2px solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  overflow: hidden;
+  clip-path: polygon(
+    0 30px,
+    30px 0,
+    100% 0,
+    100% calc(100% - 30px),
+    calc(100% - 30px) 100%,
+    0 100%
+  );
+}
+
+/* ─── Horizontal Scan Line ──────────────────────────────────────────────────── */
+
+.screen-scanline {
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  animation: screenScan 3.5s linear infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes screenScan {
+  0% { top: -4px; }
+  100% { top: 100%; }
+}
+
+/* ─── Corner Decorations ────────────────────────────────────────────────────── */
+
+.screen-corner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-width: 2px;
+  border-style: solid;
+  z-index: 3;
+}
+
+.screen-corner-tl {
+  top: 0; left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.screen-corner-tr {
+  top: 0; right: 0;
+  border-left: none;
+  border-bottom: none;
+}
+
+.screen-corner-bl {
+  bottom: 0; left: 0;
+  border-right: none;
+  border-top: none;
+}
+
+.screen-corner-br {
+  bottom: 0; right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+/* ─── Status Icon (shown when no timer) ─────────────────────────────────────── */
+
+.screen-icon {
+  font-size: 64px;
+  animation: iconPulse 2.4s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.7;
+  }
+}
+
+/* ─── Timer Ring ────────────────────────────────────────────────────────────── */
+
+.timer-ring-wrapper {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.timer-ring-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.timer-ring-time {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Title ─────────────────────────────────────────────────────────────────── */
+
+.screen-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 36px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Subtitle ──────────────────────────────────────────────────────────────── */
+
+.screen-subtitle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 16px;
+  color: #8ba394;
+  letter-spacing: 1px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Divider Line ──────────────────────────────────────────────────────────── */
+
+.screen-divider {
+  width: 260px;
+  height: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Timer Label (RETURNING IN / TIME'S UP) ────────────────────────────────── */
+
+.screen-timer-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}

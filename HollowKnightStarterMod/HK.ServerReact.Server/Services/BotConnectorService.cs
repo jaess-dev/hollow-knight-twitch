@@ -1,4 +1,3 @@
-using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using HK.Domain;
@@ -6,9 +5,13 @@ using HollowKnightStarterMod.Domain.Model;
 
 namespace HK.ServerReact.Server.Services;
 
-public interface IBotConnectorServices
+public interface IBotMessageSender
 {
     Task SendChatMessageAsync(string message);
+}
+
+public interface IBotConnectorServices : IBotMessageSender
+{
     Task SendDiedFromHazardAsync(HazardDeathDto hazardDeathDto);
     Task SendGeoEventAsync(int amountGained, int totalGeo);
     Task SendGrubSavedAsync(int grubCount);

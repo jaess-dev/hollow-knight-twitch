@@ -17,7 +17,7 @@ public class KobeFeature : IFeature
 
     public void MapEndpoints(WebApplication app) { }
 
-    public class KobeCsEventSub(IBotConnectorServices bot) : ICsEventSubscriber<CEPlayerGotKill>
+    public class KobeCsEventSub(IBotMessageSender bot) : ICsEventSubscriber<CEPlayerGotKill>
     {
         public async ValueTask OnEvent(CEPlayerGotKill data)
         {

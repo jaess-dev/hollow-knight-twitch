@@ -1,11 +1,7 @@
 import './ChatPanel.css';
-import type { Message } from './types';
+import type { ChatPanelProps, Message } from './types';
 
-export interface ChatPanelProps {
-    messages: Message[];
-    viewerCount: number;
-    chatMessagesRef: React.RefObject<HTMLDivElement>;
-}
+
 
 interface ChatMessageProps {
     message: Message;
@@ -43,7 +39,9 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
                 {message.badge && <span className="badge">{message.badge}</span>}
                 <span className="timestamp">{timestamp}</span>
             </div>
-            <div className="message-text">{message.text}</div>
+            <div className="message-text">
+                {message.textBlocks ?? message.text}
+            </div>
         </div>
     );
 };

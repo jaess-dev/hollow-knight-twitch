@@ -5,7 +5,7 @@ using HK.ServerReact.Server.Services;
 namespace HK.ServerReact.Server.Features.HollowKnightFeatures.DeathMessageFeature.Services;
 
 public sealed class DeathMessageService(
-    IBotConnectorServices botConnector,
+    IBotMessageSender botConnector,
     DeathMessageContainer messages) : IHkSubscriber<DeathEvent>
 {
     private readonly DeathMessageContainer _messages = messages;

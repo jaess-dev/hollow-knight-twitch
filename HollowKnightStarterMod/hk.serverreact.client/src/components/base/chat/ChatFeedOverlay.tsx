@@ -1,13 +1,8 @@
 import React from "react";
 import "./ChatFeedOverlay.css";
-import type { Message } from "./types";
+import type { ChatPanelProps, Message } from "./types";
 
-interface ChatFeedOverlayProps {
-    messages: Message[];
-    chatMessagesRef: React.RefObject<HTMLDivElement>;
-}
-
-export const ChatFeedOverlay: React.FC<ChatFeedOverlayProps> = ({
+export const ChatFeedOverlay: React.FC<ChatPanelProps> = ({
     messages,
     chatMessagesRef,
 }) => {
@@ -41,7 +36,9 @@ const ChatFeedMessage: React.FC<ChatFeedMessageProps> = ({ message }) => {
                     {message.badge}
                 </span>
             )}
-            <span className="chat-feed-text">{message.text}</span>
+            <span className="chat-feed-text">
+                {message.textBlocks ?? message.text}
+            </span>
             <span className="chat-feed-timestamp">{timestamp}</span>
         </div>
     );

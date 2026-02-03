@@ -1,12 +1,15 @@
 using System.Text.Json;
+using DotNetEnv;
 using HK.Domain;
+using HK.ServerReact.Server.Config;
 using HK.ServerReact.Server.Features;
 using HK.ServerReact.Server.Features.CounterStrikeFeatures;
 using HK.ServerReact.Server.Features.HollowKnightFeatures;
 using HK.ServerReact.Server.Features.HollowKnightFeatures.DeathMessageFeature;
 using HK.ServerReact.Server.Features.HollowKnightFeatures.RespawnMessageFeature;
-using HK.ServerReact.Server.Features.Hubs;
+using HK.ServerReact.Server.Features.TwClient;
 using HK.ServerReact.Server.Services;
+using HK.ServerReact.Server.Services.TwitchConnection;
 using Microsoft.AspNetCore.Mvc;
 
 IFeature[] hkFeatures = [
@@ -22,45 +25,23 @@ IFeature[] csFeatures = [
     new ThatsHotFeature(),
 ];
 FeatureProvider features = [
+    new TwitchSubscriptionFeature(),
     ..hkFeatures,
     ..csFeatures,
 ];
 
+Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("CorsPolicy", policy =>
-    {
-        policy
-            .WithOrigins(
-                "http://localhost:54024",  // React dev server
-                "https://localhost:54024"  // React dev server
-                                           // ,"https://your-production-frontend.com"
-            )
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials(); // Required for SignalR
-    });
-});
+string targetChannel = Environment.GetEnvironmentVariable("TARGET_CHANNEL")!;
+string botName = Environment.GetEnvironmentVariable("BOT_NAME")!;
+string clientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET")!;
+string clientId = Environment.GetEnvironmentVariable("CLIENT_ID")!;
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
-builder.Services.AddSignalR();
-builder.Services.AddHttpClient();
-
-builder.Services.AddSingleton(static sp =>
-{
-    var url = sp.GetRequiredService<IConfiguration>().GetSection("WebSocket").Get<string>() ?? "ws://localhost:8080";
-    return new WebSocketService(new Uri(url), sp.GetRequiredService<ILogger<WebSocketService>>());
-});
-builder.Services.AddSingleton<IWebSocketService>(sp =>
-    sp.GetRequiredService<WebSocketService>());
-builder.Services.AddSingleton<IBotConnectorServices, BotWsConnectorService>();
-
-// builder.Services.AddHostedService<WebSocketHostedService>();
-
-
+builder.Services
+    .ConfigureServices()
+    .ConfigureTwitchBot(targetChannel, botName, clientSecret, clientId);
 features.AddServices(builder.Services);
 
 var app = builder.Build();
@@ -82,11 +63,10 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapFallbackToFile("/index.html");
 features.MapEndpoints(app);
 
 app.MapPost("/api/twitch/message", async (
-    IBotConnectorServices botConnector,
+    IBotMessageSender botConnector,
     ILogger<Program> logger,
     [FromBody] MessageDot payload) =>
 {
@@ -95,6 +75,10 @@ app.MapPost("/api/twitch/message", async (
     await botConnector.SendChatMessageAsync(message);
 });
 
+app.MapTwitchAuthEndpoints(clientId, clientSecret, "https://localhost:54024", pathBase: "/api");
+
+app.MapFallbackToFile("/index.html");
 app.Run();
+
 
 public record MessageDot(string Message);
