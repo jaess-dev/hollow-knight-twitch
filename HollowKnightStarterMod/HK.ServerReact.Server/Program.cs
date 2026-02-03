@@ -26,6 +26,7 @@ IFeature[] csFeatures = [
 FeatureProvider features = [
     new TwitchSubscriptionFeature([
         typeof(MemberBerries),
+        typeof(LurkSubscription),
     ]),
     ..hkFeatures,
     ..csFeatures,
@@ -40,6 +41,9 @@ string botName = Environment.GetEnvironmentVariable("BOT_NAME")!;
 string clientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET")!;
 string clientId = Environment.GetEnvironmentVariable("CLIENT_ID")!;
 
+builder.Services.AddKeyedSingleton(
+    LurkSubscription.LurkSubscriptionTemplateMessagesDiKey, 
+    static (sp, obj) => sp.GetRequiredService<IConfiguration>().GetSection("LurkTemplates").Get<string[]?>() ?? []);
 
 builder.Services
     .ConfigureServices()

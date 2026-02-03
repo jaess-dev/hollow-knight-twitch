@@ -69,6 +69,12 @@ public class BaseSubscriptions(
             message.Channel,
             message.Message);
 
+        if (e.ChatMessage.IsMe)
+        {
+            _logger.LogInformation("Ignoring the message as we wrote it");
+            return;
+        }
+
         var client = Client(sender);
         await Task.WhenAll(
             _messageHandlers
