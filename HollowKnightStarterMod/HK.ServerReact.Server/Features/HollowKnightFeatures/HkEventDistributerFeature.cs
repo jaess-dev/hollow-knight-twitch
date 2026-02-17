@@ -48,6 +48,7 @@ public class HkEventDistributerFeature() : IFeature
                     }
 
                     var subscribers = serviceProvider.GetRequiredService<IEnumerable<IHkSubscriber<T>>>();
+                    await Task.Delay(TimeSpan.FromSeconds(4));
                     var jobs = subscribers.Select(handler => handler.OnReceivedAsync(@event).AsTask())
                         .Concat([hub.SendEvent(@event)]);
 
