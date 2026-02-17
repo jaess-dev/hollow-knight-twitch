@@ -53,6 +53,9 @@ builder.Services.AddKeyedSingleton(
 builder.Services
     .ConfigureServices()
     .ConfigureTwitchBot(targetChannel, botName, clientSecret, clientId);
+
+builder.Services.AddHostedService<SilksongModHostedService>();
+
 features.AddServices(builder.Services);
 
 var app = builder.Build();
